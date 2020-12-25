@@ -1,4 +1,10 @@
 body{
+  background: #f8f9fa;
+}
+.j-p{
+  margin-top: 1em;
+}
+/* body{
   background: #f1faee;
   font-size: 1.5em;
   font-family: arial;
@@ -50,9 +56,4 @@ h3 > span{
   float: left;
 }
 .lab-class{
-}
-/* #e63946 */
-/* #f1faee */
-/* #a8dadc */
-/* #457b9d */
-/* #1d3557 */
+} */

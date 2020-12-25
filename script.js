@@ -14,9 +14,10 @@ const newId = () => {
     }
   }
 };
+
 const addToList = () => {
   let id = newId();
-  localStorage.setItem(id, taskToDo.value);
+  localStorage.setItem(id, newTask.value);
   clrInput();
   if (localStorage.getItem('ids')) {
     localStorage.setItem('ids', localStorage.getItem('ids') + "," + id);
@@ -25,9 +26,11 @@ const addToList = () => {
   };
   updateList();
 };
+
 const clrInput = () => {
-  taskToDo.value = "";
+  newTask.value = "";
 };
+
 const getIds = () => {
   if (localStorage.getItem('ids')) {
     let listStr = localStorage.getItem('ids');
@@ -39,13 +42,13 @@ const getIds = () => {
     return listIds;
   } else {
     return 'undefined';
-  }
+  };
 };
 
 const updateList = () => {
   let ids = getIds();
   if (ids === 'undefined') {
-    message.textContent = 'Please enter tasks to do!';
+    message.style.display = "block";
   } else {
     message.style.display = 'none';
     listTodo.innerHTML = '';
@@ -77,35 +80,34 @@ const updateList = () => {
   };
 };
 
-const btnToggler = () => {
-  if (taskToDo.value === "") {
-    btn.disabled = true;
-    btn.style.background = 'transparent';
-    btn.style.color = '#457b9d';
+const addToggler = () => {
+  if (newTask.value === "") {
+    newTask.classList.remove('is-valid');
+    add.disabled = true;
   } else {
-    btn.disabled = false;
-    btn.style.background = '#457b9d';
-    btn.style.color = '#f1faee';
+    newTask.classList.add('is-valid');
+    add.disabled = false;
+    // add.classList.replace("btn-dark", "btn-success");
   };
 };
 
-const btn = document.querySelector('.btn');
-const taskToDo = document.querySelector('.taskToDo');
+const newTask = document.querySelector('#new-task');
 const listTodo = document.querySelector('.listTodo');
-const message = document.querySelector('.enter-new-task');
-const button = document.querySelector('button');
+const message = document.querySelector('#message');
+const add = document.querySelector('#add');
 
 updateList();
+addToggler();
 
 const crossCheck = document.getElementsByClassName('checkClass');
 
-taskToDo.addEventListener('input', () => {
-  btnToggler();
+newTask.addEventListener('input', () => {
+  addToggler();
 });
 
-btn.addEventListener('click', () => {
+add.addEventListener('click', () => {
   addToList();
-  btnToggler();
+  addToggler();
 });
 
 Object.keys(crossCheck).forEach(element => {
