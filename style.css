@@ -4,6 +4,12 @@ body{
 .j-p{
   margin-top: 1em;
 }
+
+@media screen and (max-width: 768px){
+  #add{
+    margin-top: .5em;
+  }
+}
 /* body{
   background: #f1faee;
   font-size: 1.5em;

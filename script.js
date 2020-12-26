@@ -95,6 +95,7 @@ const newTask = document.querySelector('#new-task');
 const listTodo = document.querySelector('.listTodo');
 const message = document.querySelector('#message');
 const add = document.querySelector('#add');
+const clearBtn = document.querySelector('.btn-danger');
 
 updateList();
 addToggler();
@@ -108,6 +109,12 @@ newTask.addEventListener('input', () => {
 add.addEventListener('click', () => {
   addToList();
   addToggler();
+});
+
+clearBtn.addEventListener('click', () => {
+  localStorage.clear();
+  listTodo.innerHTML = '';
+  updateList();
 });
 
 Object.keys(crossCheck).forEach(element => {
