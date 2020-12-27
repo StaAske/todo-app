@@ -15,9 +15,18 @@ const newId = () => {
   }
 };
 
+const timeDate = () => {
+  let date = new Date();
+  let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${months[date.getMonth()]}
+          ${date.getDate().toString()},
+          ${date.getFullYear().toString()},
+          ${date.getHours().toString()}:${date.getMinutes().toString()}`;
+};
+
 const addToList = () => {
   let id = newId();
-  localStorage.setItem(id, newTask.value);
+  localStorage.setItem(id, newTask.value + "^" + timeDate());
   clrInput();
   if (localStorage.getItem('ids')) {
     localStorage.setItem('ids', localStorage.getItem('ids') + "," + id);
@@ -54,28 +63,32 @@ const updateList = () => {
     listTodo.innerHTML = '';
     ids.reverse();
     for (var i = 0; i < ids.length; i++) {
-      // creating list block
-      let taskBlock = document.createElement('div');
-      let taskBlockAttr = document.createAttribute('class');
-      taskBlockAttr.value = "taskBlock";
-      taskBlock.setAttributeNode(taskBlockAttr);
-      // creating label
-      let stuff = document.createElement('label');
-      stuff.textContent = localStorage.getItem(ids[i]);
-      let labClass = document.createAttribute('class');
-      labClass.value = 'lab-class';
-      stuff.setAttributeNode(labClass);
-      // creating input
-      let checkBox = document.createElement('input');
-      let checkBoxType = document.createAttribute('type');
-      checkBoxType.value = 'checkbox';
-      checkBox.setAttributeNode(checkBoxType);
-      let checkClass = document.createAttribute('class');
-      checkClass.value = 'checkClass';
-      checkBox.setAttributeNode(checkClass);
-      taskBlock.appendChild(checkBox);
-      taskBlock.appendChild(stuff);
-      listTodo.appendChild(taskBlock);
+      let items = localStorage.getItem(ids[i]).split('^');
+
+      // creating li
+      let li = document.createElement('li');
+      let liClassAttr = document.createAttribute('class');
+      liClassAttr.value = "list-group-item";
+      liClassAttr.value += " d-flex";
+      liClassAttr.value += " justify-content-between";
+      li.setAttributeNode(liClassAttr);
+      // creating task item
+      let task = document.createElement('div');
+      let tasksClassAttr = document.createAttribute('class');
+      tasksClassAttr.value = "d-flex";
+      tasksClassAttr.value += " flex-column";
+      task.setAttributeNode(tasksClassAttr);
+      task.textContent = items[0];
+      // creating date time
+      let span = document.createElement('span');
+      let spanClass = document.createAttribute('class');
+      spanClass.value = 'date-time';
+      span.setAttributeNode(spanClass);
+      span.textContent = items[1];
+
+      task.appendChild(span);
+      li.appendChild(task);
+      listTodo.appendChild(li);
     };
   };
 };
@@ -111,11 +124,19 @@ add.addEventListener('click', () => {
   addToggler();
 });
 
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Enter" && newTask.value !== "") {
+    addToList();
+    addToggler();
+  };
+});
+
 clearBtn.addEventListener('click', () => {
   localStorage.clear();
   listTodo.innerHTML = '';
   updateList();
 });
+
 
 Object.keys(crossCheck).forEach(element => {
   crossCheck[element].addEventListener('click', (e) => {

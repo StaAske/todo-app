@@ -4,7 +4,9 @@ body{
 .j-p{
   margin-top: 1em;
 }
-
+.date-time{
+  font-size: .7em;
+}
 @media screen and (max-width: 768px){
   #add{
     margin-top: .5em;
