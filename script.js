@@ -43,55 +43,60 @@ const clrInput = () => {
 const getIds = () => {
   if (localStorage.getItem('ids')) {
     let listStr = localStorage.getItem('ids');
-    let listToInt = listStr.split(',');
-    let listIds = [];
-    for (var i = 0; i < listToInt.length; i++) {
-      listIds.push(parseInt(listToInt[i]));
-    }
-    return listIds;
+    let ids = listStr.split(',');
+    return ids;
   } else {
     return 'undefined';
   };
 };
 
+const deleteItem = ( itemsId ) => {
+  localStorage.removeItem( itemsId );
+  let ids = localStorage.getItem('ids').split(',');
+  let result = ids.filter( e => e !== itemsId.toString() );
+  localStorage.setItem( 'ids', result.join() );
+  updateList();
+};
+
 const updateList = () => {
+
   let ids = getIds();
+  let allInfoHTML = [];
+
   if (ids === 'undefined') {
     message.style.display = "block";
   } else {
     message.style.display = 'none';
     listTodo.innerHTML = '';
     ids.reverse();
+
     for (var i = 0; i < ids.length; i++) {
-      let items = localStorage.getItem(ids[i]).split('^');
+      let item = localStorage.getItem(ids[i]).split('^');
 
-      // creating li
-      let li = document.createElement('li');
-      let liClassAttr = document.createAttribute('class');
-      liClassAttr.value = "list-group-item";
-      liClassAttr.value += " d-flex";
-      liClassAttr.value += " justify-content-between";
-      li.setAttributeNode(liClassAttr);
-      // creating task item
-      let task = document.createElement('div');
-      let tasksClassAttr = document.createAttribute('class');
-      tasksClassAttr.value = "d-flex";
-      tasksClassAttr.value += " flex-column";
-      task.setAttributeNode(tasksClassAttr);
-      task.textContent = items[0];
-      // creating date time
-      let span = document.createElement('span');
-      let spanClass = document.createAttribute('class');
-      spanClass.value = 'date-time';
-      span.setAttributeNode(spanClass);
-      span.textContent = items[1];
-
-      task.appendChild(span);
-      li.appendChild(task);
-      listTodo.appendChild(li);
+      allInfoHTML.push( `<li class="list-group-item d-flex justify-content-between">
+                          <div class="d-flex flex-column">
+                            ${item[0]}
+                            <span class="date-time">
+                              ${item[1]}
+                            </span>
+                          </div>
+                          <button
+                              type="button"
+                              onclick="deleteItem(${ids[i]})"
+                              class="btn btn-outline-danger btn-sm"
+                              >
+        									  <i class="fas fa-trash-alt"></i>
+        								  </button>
+                        </li>`
+                      );
     };
   };
+
+  let joinedAllInfoIHTML = allInfoHTML.join('');
+  listTodo.innerHTML = joinedAllInfoIHTML;
 };
+
+var delIcon = document.getElementById('myIcon');
 
 const addToggler = () => {
   if (newTask.value === "") {
@@ -100,7 +105,6 @@ const addToggler = () => {
   } else {
     newTask.classList.add('is-valid');
     add.disabled = false;
-    // add.classList.replace("btn-dark", "btn-success");
   };
 };
 
@@ -137,16 +141,5 @@ clearBtn.addEventListener('click', () => {
   updateList();
 });
 
-
-Object.keys(crossCheck).forEach(element => {
-  crossCheck[element].addEventListener('click', (e) => {
-    // delete();
-    // need to create function to delete items from the localStorage
-
-    let targ = e.target.nextElementSibling;
-    console.log(targ);
-
-    targ.style.textDecoration = 'line-through';
-
-  });
-});
+// https://tushartiwari.netlify.app/index.html#contact
+// https://www.w3schools.com/jsref/jsref_obj_string.asp
