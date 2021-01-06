@@ -140,6 +140,3 @@ clearBtn.addEventListener('click', () => {
   listTodo.innerHTML = '';
   updateList();
 });
-
-// https://tushartiwari.netlify.app/index.html#contact
-// https://www.w3schools.com/jsref/jsref_obj_string.asp
